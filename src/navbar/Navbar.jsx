@@ -28,16 +28,16 @@ const Navbar = () => {
         </div>
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1">
-            <li><Link>Home</Link></li>
-            <li><Link>About us</Link></li>
+            <li><Link to="/">Home</Link></li>
+            <li><Link to="/about">About us</Link></li>
             <li tabIndex={0}>
               <details>
                 <summary>Products</summary>
                 <ul className="p-2 w-32">
-                  <li><Link>Flower tree</Link></li>
-                  <li><Link>fruits tree</Link></li>
-                  <li><Link>ousodi tree</Link></li>
-                  <li><Link>seeds</Link></li>
+                  <li><Link to="/flower">Flower tree</Link></li>
+                  <li><Link to="/fruits">fruits tree</Link></li>
+                  <li><Link to="/madecine">medecine tree</Link></li>
+                  <li><Link to="/seeds">seeds</Link></li>
                 </ul>
               </details>
             </li>
@@ -45,7 +45,7 @@ const Navbar = () => {
           </ul>
         </div>
         <div className="navbar-end">
-          <Link className="btn mr-6">Log in</Link>
+          <Link className="btn">Log in</Link>
         </div>
       </div>
     </div>

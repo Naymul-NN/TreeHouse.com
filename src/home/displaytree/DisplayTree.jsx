@@ -1,6 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 // import { useState } from "react";
+import Rating from "react-rating-stars-component"; // Import the rating package
+
 
 const DisplayTree = () => {
     // const [display, setdisplay] = useState([])
@@ -35,10 +37,16 @@ console.log(data?.data,isFetching,isLoading);
                 data?.data?.map(item=> (
                         <div key={item._id}> 
                           <div className="card card-compact  bg-base-100 shadow-xl">
-                       <figure className="h-52"><img className="" src={item.photo} alt="Shoes" /></figure>
+                       <figure className="h-52"><img className="hover:scale-110" src={item.photo} alt="Shoes" /></figure>
                        <div className="card-body">
-                         <h2 className="card-title">{item.name}</h2>
-                        <p>If a dog chews shoes whose shoes does he choose?</p>
+                         <h2 className="card-title">Name: {item.name}</h2>
+                        <p >  <Rating 
+                                    count={5}
+                                    value={item.rating}
+                                    size={24}
+                                    activeColor="#ffd700"
+                                    edit={false} // Set to true if you want the user to be able to edit the rating
+                                /></p>
                      <div className="card-actions ">
                      <button className="btn ">add to cart</button>
                     </div>

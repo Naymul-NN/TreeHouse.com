@@ -48,7 +48,7 @@ console.log(data?.data,isFetching,isLoading);
                                     edit={false} // Set to true if you want the user to be able to edit the rating
                                 /></p>
                      <div className="card-actions ">
-                     <button className="btn ">add to cart</button>
+                     <button className="btn hover:bg-orange-400">add to cart</button>
                     </div>
                     </div>
                      </div>

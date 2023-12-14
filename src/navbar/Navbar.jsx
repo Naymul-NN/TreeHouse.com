@@ -24,7 +24,7 @@ const Navbar = () => {
               <li><Link>Blog</Link></li>
             </ul>
           </div>
-          <Link to="/" className="btn btn-ghost normal-case text-xl">TreeHouse</Link>
+          <Link to="/" className=" normal-case text-xl"><img className="w-20" src="https://i.ibb.co/M7rS58Z/360-F-289114478-jj-FEh-EX9qu3-Wmtpsly-Zf-K5-Ih-WT4-VIU2s.jpg" alt="" /></Link>
         </div>
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1">
@@ -45,7 +45,7 @@ const Navbar = () => {
           </ul>
         </div>
         <div className="navbar-end">
-          <Link className="btn">Log in</Link>
+          <Link to="/login" className="btn">Log in</Link>
         </div>
       </div>
     </div>

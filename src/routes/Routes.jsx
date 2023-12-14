@@ -5,6 +5,7 @@ import Home from "../home/Home";
 import LatestProduct from "../latest/LatestProduct";
 import Aboutus from "../about/Aboutus";
 import Login from "../login/Login";
+import Resgister from "../register/Resgister";
 
 const router = createBrowserRouter([
     {
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
         {
           path:"/login",
           element:<Login></Login>
+        },
+        {
+          path:"/register",
+          element:<Resgister></Resgister>
         }
       ]
     },

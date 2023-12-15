@@ -7,6 +7,8 @@ import { AuthContext } from "../authprovider/AuthProvider";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import useAxiospublic from "../hooks/useAxiospublic";
 
+const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
+const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
 
 const Resgister = () => {
     const axiosPublic = useAxiospublic();
@@ -15,10 +17,10 @@ const Resgister = () => {
   const [show, setshow] = useState(false);
   const navigate = useNavigate();
 
-  const handleRegister = (e) => {
+  const handleRegister =async (e) => {
     e.preventDefault();
     const name = e.target.name.value;
-    const photoUrl = e.target.photo.value;
+    const photoUrl = e.target.photo.files[0];
     const email = e.target.email.value;
     const password = e.target.password.value;
 
@@ -36,49 +38,76 @@ const Resgister = () => {
       return;
     }
 
-    createUser(email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
-
-        // Update the user's profile with name and photoUrl
-        updateProfile(user, {
-          displayName: name,
-          photoURL: photoUrl,
-        })
-          .then(() => {
-            // console.log('User profile updated successfully.');
-            // console.log(user);
-            // toast.success('Congratulations! Registration successful');
-            const userinfo= {
-              name: user.displayName,
-              email:user.email
-            }
-            console.log(userinfo)
-          axiosPublic.post('/users', userinfo)
-            .then(res => {
-              if (res.data.insertedId) {
-                console.log('user profile info updated')
-                // reset;
-                Swal.fire({
-                  position: 'top-end',
-                  icon: 'success',
-                  title: 'you are successfully sign up',
-                  timer: 1500
-                })
-                // navigate('/')
-              }
-            })
-            navigate('/');
-          })
-          .catch((error) => {
-            console.error('Error updating user profile:', error);
-            // Handle the error as needed
-          });
-      })
-      .catch((error) => {
-        console.error('Error creating user:', error);
-        // Handle the error as needed
+    try {
+      // Create the user in Firebase
+      const userCredential = await createUser(email, password);
+      const user = userCredential.user;
+  
+      // Upload the image to the image hosting API
+      const formData = new FormData();
+      formData.append('image', photoUrl);
+  
+      const response = await axiosPublic.post(image_hosting_api, formData,{
+          headers:{
+              'Content-Type':'multipart/form-data'
+          }
       });
+  
+      // Extract the image URL from the response
+      const imageUrl = response.data.data.url;
+  
+      // Update the user's profile with name and photoUrl
+      await updateProfile(user, {
+        displayName: name,
+        photoURL: imageUrl,
+      });
+  
+      // Update additional user information in your server
+      const userinfo = {
+        name: user.displayName,
+        email: user.email,
+        photoUrl: imageUrl,
+      };
+  
+      axiosPublic.post('/users', userinfo)
+      .then(res => {
+        if (res.data.insertedId) {
+          console.log('user profile info updated');
+          
+          // Display success message using Swal
+          Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: 'You are successfully signed up',
+            timer: 1500,
+          });
+    
+          // Navigate to the desired location
+          navigate('/');
+        }
+      })
+      // .catch(error => {
+      //   console.error('Error updating user profile info:', error);
+    
+      //   // Handle the error as needed
+    
+      //   // Display error message using Swal
+      //   Swal.fire({
+      //     position: 'top-end',
+      //     icon: 'error',
+      //     title: 'Error Updating User Profile',
+      //     text: 'An error occurred while updating user profile. Please try again.',
+      //   });
+      // });
+    
+    } 
+    
+    catch (error) {
+      console.error('Error during registration:', error);
+  
+      // Handle the error as needed
+      setError('An error occurred during registration');
+    }
   };
     return (
         <div>
@@ -100,7 +129,7 @@ const Resgister = () => {
                 <label className="label">
                   <span className="label-text">Photo</span>
                 </label>
-                <input type="text" placeholder="photo url" name="photo" className="input input-bordered" required />
+                <input type="file" placeholder="upload a image" name="photo" className="input input-bordered" required />
               </div>
 
               <div className="form-control">
